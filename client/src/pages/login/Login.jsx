@@ -20,7 +20,7 @@ export default function Login() {
         }
         try {
             axios.defaults.withCredentials = true;
-            const response = await axios.post("http://localhost:4000/login", payload, {
+            const response = await axios.post(`${import.meta.env.VITE_AUTH_SERVICE}/login`, payload, {
                 Headers : {
                     "Content-Type": "application/json"
                 }

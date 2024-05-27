@@ -17,7 +17,8 @@ export const useFetchAuthUser = () => {
         }
         
         axios.defaults.withCredentials = true;
-        const response = await axios.get("http://localhost:4000/profile");
+       
+        const response = await axios.get(`${import.meta.env.VITE_AUTH_SERVICE}/profile`);
         
         if (response && response.data) {
           dispatch(login(response.data));

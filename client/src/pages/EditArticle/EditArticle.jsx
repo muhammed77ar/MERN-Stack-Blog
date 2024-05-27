@@ -18,7 +18,7 @@ export default function EditArticle() {
         const fetchArticle = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:4001/articles/${id}`);
+                const response = await axios.get(`${import.meta.env.VITE_ARTICLE_SERVICE}/articles/${id}`);
                 const article = response.data;
                 setTitle(article.title);
                 setSummary(article.summary);
@@ -47,7 +47,8 @@ export default function EditArticle() {
 
         try {
             axios.defaults.withCredentials = true;
-            const response = await axios.put(`http://localhost:4001/articles/${id}`, formData);
+            
+            const response = await axios.put(`${import.meta.env.VITE_ARTICLE_SERVICE}/articles/${id}`, formData);
             if (response) {
                 navigate("/auth/home");
             } else {

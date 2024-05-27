@@ -1,12 +1,11 @@
+require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const amqp = require("amqplib/callback_api");
 const articleRoutes = require("./routes/articleRoutes");
 
-
-
-mongoose.connect("mongodb://localhost:27017/articles", {
+mongoose.connect(process.env.DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
@@ -15,7 +14,7 @@ mongoose.connect("mongodb://localhost:27017/articles", {
   
 
   const app = express();
-    app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+    app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
     app.use(express.json());
     app.use("/uploads", express.static(__dirname + "/uploads"));
 
@@ -33,7 +32,7 @@ amqp.connect("amqps://nkytyksc:JKvl2UDhejMV4gwU86n9q7S8gbycbzvE@moose.rmq.clouda
   
     app.use("/articles", articleRoutes);
 
-    const PORT = process.env.PORT || 4001;
+    const PORT = process.env.PORT || '4001';
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });

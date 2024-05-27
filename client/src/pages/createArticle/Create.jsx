@@ -27,7 +27,7 @@ export default function Create() {
   
       try {
         axios.defaults.withCredentials = true;
-        const response = await axios.post("http://localhost:4001/articles", formData);
+        const response = await axios.post(`${import.meta.env.VITE_ARTICLE_SERVICE}/articles`, formData);
         if (response) {
           navigate("/auth/home")
         } else {

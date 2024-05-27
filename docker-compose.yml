@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  mongo_db:
+    container_name: mongo_db_container
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongo_db:/data/db
+    ports:
+      - 27017:27017
+
+  auth_service:
+    build: ./api/AuthService
+    container_name: auth_service_container
+    ports:
+      - 4000:4000
+    env_file:
+      - ./api/AuthService/.env
+    environment:
+      DB_URI: mongodb://mongo_db:27017/blog
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      - mongo_db
+
+  article_service:
+    build: ./api/ArticleService
+    container_name: article_service_container
+    ports:
+      - 4001:4001
+    env_file:
+      - ./api/ArticleService/.env
+    environment:
+      DB_URI: mongodb://mongo_db:27017/articles
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      - mongo_db
+      - auth_service
+
+  client_service:
+    build: ./client
+    container_name: client_service_container
+    ports:
+      - 5173:5173
+    env_file:
+      - ./client/.env
+    environment:
+      VITE_AUTH_SERVICE: http://localhost:4000
+      VITE_ARTICLE_SERVICE: http://localhost:4001
+      VITE_APP_URL: http://localhost:5173
+    depends_on:
+      - mongo_db
+      - auth_service
+      - article_service
+
+volumes:
+  mongo_db: {}

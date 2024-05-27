@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -7,8 +8,12 @@ const User = require("./models/User");
 const cookieParser = require("cookie-parser");
 const amqp = require("amqplib/callback_api");
 
+const PORT = process.env.PORT || '4000';
+const SECRET_KEY = process.env.SECRET_KEY;
+
+
 mongoose
-  .connect("mongodb://localhost:27017/blog", {
+  .connect(process.env.DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -26,8 +31,8 @@ amqp.connect(
         throw error1;
       }
       const app = express();
-      const secret = "xsmqahu578dsnzj32kzlmaco987xbw";
-      app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+      
+      app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
       app.use(express.json());
       app.use(cookieParser());
 
@@ -68,7 +73,7 @@ amqp.connect(
           if (passOk) {
             jwt.sign(
               { email, id: userDoc._id, username: userDoc.username },
-              secret,
+              SECRET_KEY,
               {},
               (err, token) => {
                 if (err) throw err;
@@ -87,7 +92,7 @@ amqp.connect(
 
       app.get("/profile", (req, res) => {
         const { token } = req.cookies;
-        jwt.verify(token, secret, {}, (err, info) => {
+        jwt.verify(token, SECRET_KEY, {}, (err, info) => {
           if (err) throw err;
           res.json(info);
         });
@@ -97,12 +102,10 @@ amqp.connect(
         res.cookie("token", "").json("ok");
       });
 
-      app.listen(4000, () => {
-        console.log("Server is running on port 4000");
+      app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
       });
     });
   }
 );
 
-//mongodb+srv://mohamedar4477:9iLZD7DM3t2wHbll@blog.lt9heel.mongodb.net/?retryWrites=true&w=majority&appName=blog
-//9iLZD7DM3t2wHbll

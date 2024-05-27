@@ -22,7 +22,7 @@ export default function Signup() {
             confirmPassword : confirmPasswordRef.current.value
         }
         try{
-            const response = await axios.post("http://localhost:4000/register", payload, {
+            const response = await axios.post(`${import.meta.env.VITE_AUTH_SERVICE}/register`, payload, {
                 Headers : {
                     "Content-Type": "application/json"
                 }
