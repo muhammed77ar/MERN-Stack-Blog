@@ -9,7 +9,7 @@ const uploadMiddleware = multer({ dest: 'uploads/' });
 const Article = require('../models/Article');
 
 
-const secret = "xsmqahu578dsnzj32kzlmaco987xbw"
+const SECRET_KEY = process.env.SECRET_KEY;
 
 
 router.use(cookieParser());
@@ -25,7 +25,7 @@ router.post('/', uploadMiddleware.single('image'), async (req,res) => {
     fs.renameSync(path, newPath);
   
     const {token} = req.cookies;
-    jwt.verify(token, secret, {}, async (err,info) => {
+    jwt.verify(token, SECRET_KEY, {}, async (err,info) => {
       if (err) throw err;
       const {title,summary,content} = req.body;
       const articleDoc = await Article.create({
@@ -76,7 +76,7 @@ router.put('/:id', uploadMiddleware.single('image'), async (req, res) => {
   }
 
   const { token } = req.cookies;
-  jwt.verify(token, secret, {}, async (err, info) => {
+  jwt.verify(token, SECRET_KEY, {}, async (err, info) => {
     if (err) throw err;
     const { id, title, summary, content } = req.body;
     try {

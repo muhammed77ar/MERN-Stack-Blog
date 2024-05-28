@@ -27,11 +27,10 @@ services:
     container_name: article_service_container
     ports:
       - 4001:4001
-    env_file:
-      - ./api/ArticleService/.env
     environment:
       DB_URI: mongodb://mongo_db:27017/articles
       FRONTEND_URL: http://localhost:5173
+      SECRET_KEY : xsmqahu578dsnzj32kzlmaco987xbw
     depends_on:
       - mongo_db
       - auth_service
@@ -41,8 +40,6 @@ services:
     container_name: client_service_container
     ports:
       - 5173:5173
-    env_file:
-      - ./client/.env
     environment:
       VITE_AUTH_SERVICE: http://localhost:4000
       VITE_ARTICLE_SERVICE: http://localhost:4001
