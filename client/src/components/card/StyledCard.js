@@ -46,7 +46,7 @@ margin: 30px 0;
     margin-bottom: 20px;
     margin-left: 20px;
     .profile{
-        background-color: green;
+        background-color: #0077ff;
         padding: 10px;
         width: 30px;
         height: 30px;

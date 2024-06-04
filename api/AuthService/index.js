@@ -11,6 +11,7 @@ const amqp = require("amqplib/callback_api");
 const PORT = process.env.PORT || '4000';
 const SECRET_KEY = process.env.SECRET_KEY;
 
+
 mongoose
   .connect(process.env.DB_URI, {
     useNewUrlParser: true,
@@ -23,13 +24,11 @@ amqp.connect(
   "amqps://nkytyksc:JKvl2UDhejMV4gwU86n9q7S8gbycbzvE@moose.rmq.cloudamqp.com/nkytyksc",
   (error0, connection) => {
     if (error0) {
-      console.error("AMQP connection error:", error0);
-      return;
+      throw error0;
     }
     connection.createChannel((error1, channel) => {
       if (error1) {
-        console.error("AMQP channel error:", error1);
-        return;
+        throw error1;
       }
       const app = express();
       
@@ -51,8 +50,7 @@ amqp.connect(
             return res.status(400).json({ error: "Username or email already exists" });
           }
 
-          const hashedPassword = await bcrypt.hash(password, 10);
-          const userDoc = await User.create({ username, email, password: hashedPassword });
+          const userDoc = await User.create({ username, email, password });
 
           res.status(201).json(userDoc);
         } catch (error) {
@@ -60,31 +58,26 @@ amqp.connect(
           if (error.name === 'ValidationError') {
             const errors = Object.values(error.errors).map(err => err.message);
             return res.status(400).json({ errors });
-          }
+        }
           res.status(500).json({ error: "Server error" });
         }
       });
 
       app.post("/login", async (req, res) => {
         const { email, password } = req.body;
-        try {
-          const userDoc = await User.findOne({ email });
-          if (!userDoc) {
-            return res.status(400).json("Email or password incorrect!!");
-          }
-          
-          const passOk = await bcrypt.compare(password, userDoc.password);
+        const userDoc = await User.findOne({ email });
+        if (!userDoc) {
+          res.status(400).json("Email or password incorrect!!");
+        } else {
+          const passOk = bcrypt.compareSync(password, userDoc.password);
           if (passOk) {
             jwt.sign(
               { email, id: userDoc._id, username: userDoc.username },
               SECRET_KEY,
               {},
               (err, token) => {
-                if (err) {
-                  console.error("JWT sign error:", err);
-                  return res.status(500).json({ error: "Server error" });
-                }
-                res.cookie("token", token, { httpOnly: true }).json({
+                if (err) throw err;
+                res.cookie("token", token).json({
                   id: userDoc._id,
                   username: userDoc.username,
                   email,
@@ -94,28 +87,19 @@ amqp.connect(
           } else {
             res.status(400).json("Email or password incorrect!!");
           }
-        } catch (error) {
-          console.error("Login error:", error);
-          res.status(500).json({ error: "Server error" });
         }
       });
 
       app.get("/profile", (req, res) => {
         const { token } = req.cookies;
-        if (!token) {
-          return res.status(401).json({ error: "Unauthorized" });
-        }
         jwt.verify(token, SECRET_KEY, {}, (err, info) => {
-          if (err) {
-            console.error("JWT verify error:", err);
-            return res.status(401).json({ error: "Unauthorized" });
-          }
+          if (err) throw err;
           res.json(info);
         });
       });
 
       app.post("/logout", (req, res) => {
-        res.cookie("token", "", { httpOnly: true }).json("ok");
+        res.cookie("token", "").json("ok");
       });
 
       app.listen(PORT, () => {

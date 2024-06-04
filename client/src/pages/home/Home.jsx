@@ -3,6 +3,7 @@ import axios from "axios";
 import ArticleSection from "../../components/articleSection/ArticleSection";
 import Hero from "../../components/hero/Hero";
 import { useNavigate } from "react-router-dom";
+import AboutSection from "../../components/aboutSection/AboutSection";
 
 export default function Home() {
   const [articles, setArticles] = useState([]);
@@ -26,6 +27,7 @@ export default function Home() {
   return (
     <div className='home'>
       <Hero />
+      <AboutSection />
       <ArticleSection articles={articles} />
     </div>
   )

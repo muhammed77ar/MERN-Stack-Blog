@@ -7,15 +7,14 @@ services:
     restart: always
     volumes:
       - mongo_db:/data/db
-    ports:
-      - 27017:27017
-
+  
   auth_service:
     build: ./api/AuthService
     container_name: auth_service_container
     ports:
       - 4000:4000
     environment:
+      PORT: 4000
       DB_URI: mongodb://mongo_db:27017/blog
       FRONTEND_URL: http://localhost:5173
       SECRET_KEY : xsmqahu578dsnzj32kzlmaco987xbw
@@ -28,6 +27,7 @@ services:
     ports:
       - 4001:4001
     environment:
+      PORT: 4001
       DB_URI: mongodb://mongo_db:27017/articles
       FRONTEND_URL: http://localhost:5173
       SECRET_KEY : xsmqahu578dsnzj32kzlmaco987xbw

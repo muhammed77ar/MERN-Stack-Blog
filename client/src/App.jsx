@@ -12,6 +12,8 @@ import Create from "./pages/createArticle/Create"
 import axios from "axios"
 import ArticleDetails from "./pages/ArticleDetails/ArticleDetails"
 import EditArticle from "./pages/EditArticle/EditArticle"
+import Profile from "./pages/profile/Profile"
+import Favourites from "./pages/Favourites/Favourites"
 
 
 const GlobalStyle = createGlobalStyle`
@@ -63,7 +65,7 @@ useEffect(()=>{
   return (
     <div className="auth-layout">
       <GlobalStyle />
-      <Outlet />
+      <Outlet key={location.pathname} />
       <Footer />
     </div>
   );
@@ -91,8 +93,16 @@ const router = createBrowserRouter([
         element : <Signup />
       },
       {
-        path : "articleDetails/:id",
+        path : "details/:id",
         element : <ArticleDetails />
+      },
+      {
+        path : "profile",
+        element : <Profile />
+      },
+      {
+        path : "favourites",
+        element : <Favourites />
       }
     ]
   },
@@ -113,12 +123,21 @@ const router = createBrowserRouter([
         element : <Create />
       },
       {
-        path : "articleDetails/:id",
+        path : "details/:id",
         element : <ArticleDetails />
       },
       {
         path : "edit/:id",
         element : <EditArticle />
+      },
+      {
+        path : "profile",
+        element : <Profile />
+      }
+      ,
+      {
+        path : "favourites",
+        element : <Favourites />
       }
     ]
   },

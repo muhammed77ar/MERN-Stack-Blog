@@ -1,43 +1,37 @@
 import styled from "styled-components";
 
 export const EditStyle = styled.div`
-h1{
+  h1 {
     text-align: center;
     font-size: 35px;
     color: black;
-}
+  }
 `;
 
 export const FormContainer = styled.div`
-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 30px auto 0;
   padding: 20px;
   border-radius: 5px;
-  margin-top: 30px;
 `;
 
 export const StyledInput = styled.input`
   width: 96%;
-  padding: 10px;
-  margin-bottom: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  color: black;
-  border-radius: 3px;
-  background-color: white;
-  border: 1px solid lightgray;
   height: 40px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  font-size: 15px;
   padding-left: 10px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+
   &:focus {
     border: 2px solid #7d92f9;
     outline: none;
   }
 `;
-
 
 const FileInput = styled.input`
   position: relative;
@@ -49,8 +43,8 @@ export const FileSelectorButton = styled.span`
 `;
 
 export const StyledFileInput = styled(FileInput)`
-  /* Faked label styles and icon */
   width: 96%;
+  
   &::before {
     position: absolute;
     pointer-events: none;
@@ -71,7 +65,6 @@ export const StyledFileInput = styled(FileInput)`
     content: "Upload File";
   }
 
-  /* file upload button */
   &::file-selector-button {
     border-radius: 4px;
     padding: 0 27px;
@@ -84,18 +77,15 @@ export const StyledFileInput = styled(FileInput)`
     margin-right: 16px;
     transition: background-color 200ms;
 
-    /* file upload button hover state */
     &:hover {
       background-color: #f3f4f6;
     }
 
-    /* file upload button active state */
     &:active {
       background-color: #e5e7eb;
     }
   }
 `;
-
 
 export const StyledButton = styled.button`
   display: block;

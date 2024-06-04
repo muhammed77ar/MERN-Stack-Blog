@@ -14,7 +14,7 @@ export default function Card({article}) {
       const token = localStorage.getItem("ACCESS_TOKEN")
     
   return (
-    <Link to={token ? `/auth/articleDetails/${article._id}` : `/articleDetails/${article._id}`} style={{color:"black"}}>
+    <Link to={token ? `/auth/details/${article._id}` : `/details/${article._id}`} style={{color:"black"}}>
     <CardStyle>
         <div className="top">
             <img src={`http://localhost:4001/${article?.image}`} alt="article image" />

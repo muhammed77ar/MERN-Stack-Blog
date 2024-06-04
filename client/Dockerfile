@@ -1,17 +1,8 @@
-FROM node:20-alpine3.18
-
-# RUN addgroup app && adduser -S -G app app
-
-# USER app
-
+FROM node:alpine 
 WORKDIR /app
-
-COPY package*.json ./
+COPY package*.json .
 
 RUN npm install
-
 COPY . .
-
 EXPOSE 5173
-
-CMD npm run dev
+CMD ["npm","run","dev"]

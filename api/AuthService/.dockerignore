@@ -1,6 +1,5 @@
 node_modules
-.env
 Dockerfile
 .dockerignore
+.env
 docker-compose.yaml
-
